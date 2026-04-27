@@ -1,0 +1,94 @@
+@extends('layouts.app')
+
+@section('content')
+    <h1 class="page-title">Tambah Performa Pemain</h1>
+
+    @if($errors->any())
+        <div style="color:red; margin-bottom:15px;">
+            <ul>
+                @foreach($errors->all() as $error)
+                    <li>{{ $error }}</li>
+                @endforeach
+            </ul>
+        </div>
+    @endif
+
+    <form action="{{ route('admin.performa.store') }}" method="POST">
+        @csrf
+
+        <div class="form-group">
+            <label>Pemain</label>
+            <select name="pemain_id">
+                <option value="">-- Pilih Pemain --</option>
+                @foreach($pemains as $pemain)
+                    <option value="{{ $pemain->id }}">{{ $pemain->nama_lengkap }}</option>
+                @endforeach
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label>Latihan</label>
+            <select name="latihan_id">
+                <option value="">-- Pilih Latihan --</option>
+                @foreach($latihans as $latihan)
+                    <option value="{{ $latihan->id }}">{{ $latihan->tanggal }} - {{ $latihan->lokasi }}</option>
+                @endforeach
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label>Pelatih</label>
+            <select name="pelatih_id">
+                <option value="">-- Pilih Pelatih --</option>
+                @foreach($pelatihs as $pelatih)
+                    <option value="{{ $pelatih->id }}">{{ $pelatih->nama_lengkap }}</option>
+                @endforeach
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label>Tanggal Penilaian</label>
+            <input type="date" name="tanggal_penilaian" value="{{ old('tanggal_penilaian') }}">
+        </div>
+
+        <div class="form-group">
+            <label>Stamina</label>
+            <input type="number" name="stamina" value="{{ old('stamina') }}" min="0" max="100">
+        </div>
+
+        <div class="form-group">
+            <label>Speed</label>
+            <input type="number" name="speed" value="{{ old('speed') }}" min="0" max="100">
+        </div>
+
+        <div class="form-group">
+            <label>Shooting</label>
+            <input type="number" name="shooting" value="{{ old('shooting') }}" min="0" max="100">
+        </div>
+
+        <div class="form-group">
+            <label>Passing</label>
+            <input type="number" name="passing" value="{{ old('passing') }}" min="0" max="100">
+        </div>
+
+        <div class="form-group">
+            <label>Dribbling</label>
+            <input type="number" name="dribbling" value="{{ old('dribbling') }}" min="0" max="100">
+        </div>
+
+        <div class="form-group">
+            <label>Defense</label>
+            <input type="number" name="defense" value="{{ old('defense') }}" min="0" max="100">
+        </div>
+
+        <div class="form-group">
+            <label>Catatan</label>
+            <textarea name="catatan">{{ old('catatan') }}</textarea>
+        </div>
+
+        <div class="button-group">
+            <button type="submit" class="btn btn-primary">Simpan</button>
+            <a href="{{ route('admin.performa.index') }}" class="btn btn-secondary">Kembali</a>
+        </div>
+    </form>
+@endsection
