@@ -54,6 +54,38 @@ class LoginRequest extends FormRequest
     }
 
     /**
+     * Attempt to authenticate the request's credentials with role verification.
+     *
+     * @param string $role
+     * @throws ValidationException
+     */
+    public function authenticateRole(string $role): void
+    {
+        $this->ensureIsNotRateLimited();
+
+        if (! Auth::attempt($this->only('email', 'password'), $this->boolean('remember'))) {
+            RateLimiter::hit($this->throttleKey());
+
+            throw ValidationException::withMessages([
+                'email' => trans('auth.failed'),
+            ]);
+        }
+
+        // Verify the authenticated user has the correct role
+        $user = Auth::user();
+        if ($user->role !== $role) {
+            Auth::logout();
+            RateLimiter::hit($this->throttleKey());
+
+            throw ValidationException::withMessages([
+                'email' => trans('auth.failed') . ' - Akun ini bukan ' . __('roles.' . $role),
+            ]);
+        }
+
+        RateLimiter::clear($this->throttleKey());
+    }
+
+    /**
      * Ensure the login request is not rate limited.
      *
      * @throws ValidationException

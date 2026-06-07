@@ -44,6 +44,13 @@ class PerformaController extends Controller
 
         Performa::create($request->all());
 
+        $performa = Performa::where('pemain_id', $request->pemain_id)
+            ->where('latihan_id', $request->latihan_id)
+            ->first();
+        if ($performa) {
+            $this->logActivity($performa, 'create', $request->all());
+        }
+
         return redirect()->route('admin.performa.index')
             ->with('success', 'Data performa berhasil ditambahkan');
     }
@@ -75,7 +82,10 @@ class PerformaController extends Controller
         ]);
 
         $performa = Performa::findOrFail($id);
-        $performa->update($request->all());
+        $data = $request->all();
+        $performa->update($data);
+
+        $this->logActivity($performa, 'update', $data);
 
         return redirect()->route('admin.performa.index')
             ->with('success', 'Data performa berhasil diupdate');
@@ -84,7 +94,10 @@ class PerformaController extends Controller
     public function destroy($id)
     {
         $performa = Performa::findOrFail($id);
+        $performaData = $performa->toArray();
         $performa->delete();
+
+        $this->logActivity($performa, 'delete', $performaData);
 
         return redirect()->route('admin.performa.index')
             ->with('success', 'Data performa berhasil dihapus');

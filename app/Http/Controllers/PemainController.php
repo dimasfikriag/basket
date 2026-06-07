@@ -36,6 +36,11 @@ class PemainController extends Controller
 
         Pemain::create($request->all());
 
+        $pemain = Pemain::where('nama_lengkap', $request->nama_lengkap)->first();
+        if ($pemain) {
+            $this->logActivity($pemain, 'create', $request->all());
+        }
+
         return redirect()->route('admin.pemain.index')
             ->with('success', 'Data pemain berhasil ditambahkan');
     }
@@ -67,7 +72,10 @@ class PemainController extends Controller
         ]);
 
         $pemain = Pemain::findOrFail($id);
-        $pemain->update($request->all());
+        $data = $request->all();
+        $pemain->update($data);
+
+        $this->logActivity($pemain, 'update', $data);
 
         return redirect()->route('admin.pemain.index')
             ->with('success', 'Data pemain berhasil diupdate');
@@ -76,7 +84,10 @@ class PemainController extends Controller
     public function destroy($id)
     {
         $pemain = Pemain::findOrFail($id);
+        $pemainData = $pemain->toArray();
         $pemain->delete();
+
+        $this->logActivity($pemain, 'delete', $pemainData);
 
         return redirect()->route('admin.pemain.index')
             ->with('success', 'Data pemain berhasil dihapus');

@@ -47,6 +47,16 @@ class PelatihAreaController extends Controller
             'keterangan' => $request->keterangan,
         ]);
 
+        $presensi = Presensi::where('latihan_id', $request->latihan_id)
+            ->where('pemain_id', $request->pemain_id)
+            ->latest()
+            ->first();
+        if ($presensi) {
+            $this->logActivity($presensi, 'create', $request->only([
+                'latihan_id', 'pemain_id', 'status_kehadiran', 'keterangan'
+            ]));
+        }
+
         return redirect()->route('pelatih.presensi')
             ->with('success', 'Presensi berhasil ditambahkan.');
     }
@@ -96,6 +106,14 @@ class PelatihAreaController extends Controller
             'catatan' => $request->catatan,
             'tanggal_penilaian' => $request->tanggal_penilaian,
         ]);
+
+        $performa = Performa::where('pemain_id', $request->pemain_id)
+            ->where('latihan_id', $request->latihan_id)
+            ->latest()
+            ->first();
+        if ($performa) {
+            $this->logActivity($performa, 'create', $request->all());
+        }
 
         return redirect()->route('pelatih.performa')
             ->with('success', 'Performa berhasil ditambahkan.');

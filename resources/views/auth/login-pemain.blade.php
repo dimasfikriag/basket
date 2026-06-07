@@ -2,20 +2,17 @@
     <!-- Session Status -->
     <x-auth-session-status class="mb-4" :status="session('status')" />
 
-    <form method="POST" id="loginForm" action="{{ route('login.store') }}">
-        @csrf
+    <div class="mb-6">
+        <a href="{{ route('login') }}" class="text-sm text-indigo-600 hover:text-indigo-900 dark:text-indigo-400">← Kembali ke pemilihan akun</a>
+    </div>
 
-        <!-- Role Selection -->
-        <div class="mb-4">
-            <x-input-label for="role" :value="__('Tipe Akun')" />
-            <select id="role" name="role" class="block mt-1 w-full border-gray-300 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-300 rounded-md shadow-sm" onchange="updateFormAction()">
-                <option value="">-- Pilih Tipe Akun --</option>
-                <option value="pelatih" selected>Pelatih</option>
-                <option value="admin">Admin</option>
-                <option value="pemain">Pemain</option>
-            </select>
-            <x-input-error :messages="$errors->get('role')" class="mt-2" />
-        </div>
+    <div class="mb-6">
+        <h1 class="text-2xl font-bold text-gray-900 dark:text-white mb-2">👤 Login Pemain</h1>
+        <p class="text-gray-600 dark:text-gray-400">Masukkan email dan password Anda untuk masuk ke akun pemain</p>
+    </div>
+
+    <form method="POST" action="{{ route('login.pemain') }}">
+        @csrf
 
         <!-- Email Address -->
         <div>
@@ -56,24 +53,4 @@
             </x-primary-button>
         </div>
     </form>
-
-    <script>
-        function updateFormAction() {
-            const role = document.getElementById('role').value;
-            const form = document.getElementById('loginForm');
-            
-            if (role === 'pelatih') {
-                form.action = "{{ route('login.pelatih') }}";
-            } else if (role === 'admin') {
-                form.action = "{{ route('login.admin') }}";
-            } else if (role === 'pemain') {
-                form.action = "{{ route('login.pemain') }}";
-            } else {
-                form.action = "{{ route('login.store') }}";
-            }
-        }
-        
-        // Set initial action
-        updateFormAction();
-    </script>
 </x-guest-layout>

@@ -18,12 +18,27 @@
 
         <div class="form-group">
             <label>User Akun (opsional)</label>
-            <select name="user_id">
+            <select name="user_id" id="userSelect">
                 <option value="">-- Pilih User Pelatih --</option>
                 @foreach($users as $user)
-                    <option value="{{ $user->id }}">{{ $user->name }} - {{ $user->email }}</option>
+                    <option value="{{ $user->id }}">
+                        {{ $user->name }} - {{ $user->email }}
+                    </option>
                 @endforeach
             </select>
+        </div>
+
+        {{-- 🔥 INPUT USER BARU --}}
+        <div id="userBaru">
+            <div class="form-group">
+                <label>Email</label>
+                <input type="email" name="email" class="form-control" value="{{ old('email') }}">
+            </div>
+
+            <div class="form-group">
+                <label>Password</label>
+                <input type="password" name="password" class="form-control">
+            </div>
         </div>
 
         <div class="form-group">
@@ -56,4 +71,18 @@
             <a href="{{ route('admin.pelatih.index') }}" class="btn btn-secondary">Kembali</a>
         </div>
     </form>
+
+    {{-- 🔥 SCRIPT LOGIC --}}
+    <script>
+        const userSelect = document.getElementById('userSelect');
+        const userBaru = document.getElementById('userBaru');
+
+        userSelect.addEventListener('change', function () {
+            if (this.value) {
+                userBaru.style.display = 'none';
+            } else {
+                userBaru.style.display = 'block';
+            }
+        });
+    </script>
 @endsection

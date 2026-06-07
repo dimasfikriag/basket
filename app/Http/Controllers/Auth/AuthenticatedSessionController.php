@@ -32,6 +32,42 @@ class AuthenticatedSessionController extends Controller
     }
 
     /**
+     * Handle pelatih authentication request.
+     */
+    public function storePelatih(LoginRequest $request): RedirectResponse
+    {
+        $request->authenticateRole('pelatih');
+
+        $request->session()->regenerate();
+
+        return redirect()->intended(route('dashboard', absolute: false));
+    }
+
+    /**
+     * Handle admin authentication request.
+     */
+    public function storeAdmin(LoginRequest $request): RedirectResponse
+    {
+        $request->authenticateRole('admin');
+
+        $request->session()->regenerate();
+
+        return redirect()->intended(route('dashboard', absolute: false));
+    }
+
+    /**
+     * Handle pemain authentication request.
+     */
+    public function storePemain(LoginRequest $request): RedirectResponse
+    {
+        $request->authenticateRole('pemain');
+
+        $request->session()->regenerate();
+
+        return redirect()->intended(route('dashboard', absolute: false));
+    }
+
+    /**
      * Destroy an authenticated session.
      */
     public function destroy(Request $request): RedirectResponse

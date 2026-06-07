@@ -34,6 +34,13 @@ class PresensiController extends Controller
 
         Presensi::create($request->all());
 
+        $presensi = Presensi::where('latihan_id', $request->latihan_id)
+            ->where('pemain_id', $request->pemain_id)
+            ->first();
+        if ($presensi) {
+            $this->logActivity($presensi, 'create', $request->all());
+        }
+
         return redirect()->route('admin.presensi.index')
             ->with('success', 'Data presensi berhasil ditambahkan');
     }
@@ -57,7 +64,10 @@ class PresensiController extends Controller
         ]);
 
         $presensi = Presensi::findOrFail($id);
-        $presensi->update($request->all());
+        $data = $request->all();
+        $presensi->update($data);
+
+        $this->logActivity($presensi, 'update', $data);
 
         return redirect()->route('admin.presensi.index')
             ->with('success', 'Data presensi berhasil diupdate');
@@ -66,7 +76,10 @@ class PresensiController extends Controller
     public function destroy($id)
     {
         $presensi = Presensi::findOrFail($id);
+        $presensiData = $presensi->toArray();
         $presensi->delete();
+
+        $this->logActivity($presensi, 'delete', $presensiData);
 
         return redirect()->route('admin.presensi.index')
             ->with('success', 'Data presensi berhasil dihapus');

@@ -32,6 +32,13 @@ class LatihanController extends Controller
 
         Latihan::create($request->all());
 
+        $latihan = Latihan::where('tanggal', $request->tanggal)
+            ->where('jam', $request->jam)
+            ->first();
+        if ($latihan) {
+            $this->logActivity($latihan, 'create', $request->all());
+        }
+
         return redirect()->route('admin.latihan.index')
             ->with('success', 'Data latihan berhasil ditambahkan');
     }
@@ -55,7 +62,10 @@ class LatihanController extends Controller
         ]);
 
         $latihan = Latihan::findOrFail($id);
-        $latihan->update($request->all());
+        $data = $request->all();
+        $latihan->update($data);
+
+        $this->logActivity($latihan, 'update', $data);
 
         return redirect()->route('admin.latihan.index')
             ->with('success', 'Data latihan berhasil diupdate');
@@ -64,7 +74,10 @@ class LatihanController extends Controller
     public function destroy($id)
     {
         $latihan = Latihan::findOrFail($id);
+        $latihanData = $latihan->toArray();
         $latihan->delete();
+
+        $this->logActivity($latihan, 'delete', $latihanData);
 
         return redirect()->route('admin.latihan.index')
             ->with('success', 'Data latihan berhasil dihapus');

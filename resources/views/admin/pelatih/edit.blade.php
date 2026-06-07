@@ -35,6 +35,11 @@
         </div>
 
         <div class="form-group">
+            <label>Password (opsional)</label>
+            <input type="password" name="password" class="form-control" placeholder="Kosongkan jika tidak ingin mengganti password">
+        </div>
+
+        <div class="form-group">
             <label>Lisensi</label>
             <input type="text" name="lisensi" value="{{ old('lisensi', $pelatih->lisensi) }}">
         </div>

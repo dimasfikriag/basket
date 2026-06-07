@@ -45,7 +45,7 @@ class PemainAreaController extends Controller
             'alamat' => 'nullable|string',
         ]);
 
-        $pemain->update([
+        $data = [
             'nama_lengkap' => $request->nama_lengkap,
             'tanggal_lahir' => $request->tanggal_lahir,
             'nomor_punggung' => $request->nomor_punggung,
@@ -54,7 +54,10 @@ class PemainAreaController extends Controller
             'berat_badan' => $request->berat_badan,
             'no_hp' => $request->no_hp,
             'alamat' => $request->alamat,
-        ]);
+        ];
+
+        $pemain->update($data);
+        $this->logActivity($pemain, 'update', $data);
 
         return redirect()->route('pemain.profil')
             ->with('success', 'Profil berhasil diperbarui.');

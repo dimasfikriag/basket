@@ -177,6 +177,7 @@
         }
 
         input[type="text"],
+        input[type="password"],
         input[type="date"],
         input[type="number"],
         input[type="email"],
@@ -303,6 +304,7 @@
                 <a href="{{ route('admin.performa.index') }}">Performa</a>
                 <a href="{{ route('admin.performa.grafik') }}">Grafik Performa</a>
                 <a href="{{ route('admin.laporan.performa') }}">Laporan Performa</a>
+                <a href="{{ route('admin.activity-logs.index') }}">Log Aktivitas</a>
            @elseif(auth()->user()->role == 'pelatih')
                 <h3>Menu Pelatih</h3>
                 <a href="{{ route('pelatih.dashboard') }}">Dashboard</a>

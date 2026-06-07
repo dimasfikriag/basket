@@ -5,6 +5,7 @@ use App\Http\Controllers\PemainController;
 use App\Http\Controllers\PelatihController;
 use App\Http\Controllers\LatihanController;
 use App\Http\Controllers\PresensiController;
+use App\Http\Controllers\ActivityLogController;
 use App\Http\Controllers\PerformaController;
 use App\Http\Controllers\PemainAreaController;
 use App\Http\Controllers\PelatihAreaController;
@@ -73,6 +74,10 @@ Route::get('/admin/performa/grafik', [PerformaController::class, 'grafik'])->nam
 Route::get('/admin/performa/{id}/edit', [PerformaController::class, 'edit'])->name('admin.performa.edit');
 Route::put('/admin/performa/{id}', [PerformaController::class, 'update'])->name('admin.performa.update');
 Route::delete('/admin/performa/{id}', [PerformaController::class, 'destroy'])->name('admin.performa.destroy');
+
+    Route::get('/admin/activity-logs', [ActivityLogController::class, 'index'])->name('admin.activity-logs.index');
+    Route::delete('/admin/activity-logs/{id}', [ActivityLogController::class, 'destroy'])->name('admin.activity-logs.destroy');
+    Route::post('/admin/activity-logs/destroy-old', [ActivityLogController::class, 'destroyOld'])->name('admin.activity-logs.destroy-old');
 });
 
 Route::middleware(['auth', 'role:pelatih'])->group(function () {
